@@ -97,28 +97,65 @@ model Product {
 
 ```
 {products.map((item) => (
-          <div key={item.id} className="border-white border-1 rounded-[16px] overflow-hidden">
-            <Image
-              className="w-full h-[32.6vw] object-cover object-top rounded-[16px]" 
-              src={item.foto} 
-              alt='main foto' 
-              width={600} 
-              height={600} 
-            />
-            <div className="p-5">
-              <h6 className="mb-2 font-cormorant text-3xl">{item.name}</h6>
-              <p className="mb-1">{item.description}</p>
-              <div className="text-right">
-                <span className="font-cormorant text-3xl">{item.price} ₽</span>
-              </div>
-            </div>
-          </div>
-        ))}
+  <div key={item.id} className="border-white border-1 rounded-[16px] overflow-hidden">
+    <Image
+      className="w-full h-[16.6vw] object-cover object-top rounded-[16px]" 
+      src={item.foto || '/no_image.gif'} 
+      alt='main foto' 
+      width={300} 
+      height={300} 
+    />
+    <div className="p-5">
+      <h6 className="mb-2 font-cormorant text-2xl">{item.name || 'Название фигурки в данный момент отсутствует'}</h6>
+      <p className="mb-1 text-[14px]">{item.description || 'Описание отсутствует'}</p>
+      <div className="text-right">
+        <span className="font-cormorant text-3xl">{item.price || 'Уточняйте у менеджера'} ₽</span>
+        <Button />
+      </div>
+    </div>
+  </div>
+))} 
 ```
 
 <h4>Здесь нужно обратить внимание, что Typescript не требует типизации товаров, которые мы создали, т.к Prisma генерирует типы автоматически.</h4>
 
-После этого может возникнуть проблема
+После этого может возникнуть такая проблема: 
+
+<img width="1040" height="307" alt="Screenshot_1" src="https://github.com/user-attachments/assets/ebc29a3a-1e0c-4826-bf5d-fa5abe597830" />
+
+урл на этом скрине, это адрес изображения первого товара в нашей БД, и эта ошибка означает что вы используете компонент next/image из Next.js, но передаёте в него изображение с внешнего домена (https://ir-8.ozone.ru/...), который не добавлен в список разрешённых доменов в вашем next.config.js.
+<br>
+Компонент next/image (Image) требует, чтобы все внешние изображения загружались только с предварительно разрешённых доменов, для безопасности и оптимизации изображений на стороне сервера.
+<br>
+Решить эту проблему можно добавив домен изображения в список разрешенных в вашем next.config.js. Вот так: 
+
+```
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
+};
+
+// next.config.js
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ir-8.ozone.ru',
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.insales-cdn.com',
+      }
+      ... и дальше
+    ],
+  },
+};
+
+export default nextConfig;
+
+```
 
 
 
