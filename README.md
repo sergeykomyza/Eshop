@@ -94,7 +94,32 @@ model Product {
 <br>
 Если вывести на странице лог этих товаров - `console.log(products)`, мы должны в увидеть в консоли json список из товаров, которые мы добавили. Если список есть, значит все ок. Теперь можно замапить товары.
 <br>
+
+```
+{products.map((item) => (
+          <div key={item.id} className="border-white border-1 rounded-[16px] overflow-hidden">
+            <Image
+              className="w-full h-[32.6vw] object-cover object-top rounded-[16px]" 
+              src={item.foto} 
+              alt='main foto' 
+              width={600} 
+              height={600} 
+            />
+            <div className="p-5">
+              <h6 className="mb-2 font-cormorant text-3xl">{item.name}</h6>
+              <p className="mb-1">{item.description}</p>
+              <div className="text-right">
+                <span className="font-cormorant text-3xl">{item.price} ₽</span>
+              </div>
+            </div>
+          </div>
+        ))}
+```
+
 <h4>Здесь нужно обратить внимание, что Typescript не требует типизации товаров, которые мы создали, т.к Prisma генерирует типы автоматически.</h4>
+
+После этого может возникнуть проблема
+
 
 
 
