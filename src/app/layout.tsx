@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+
+import {geistSans, geistMono, cormorant, robotoRegular, robotoBold, BitcountPropDouble, oswaldLight, oswaldRegular } from "./fonts";
 import "./globals.css";
+import { Header } from "@/components/header/Header";
+import { Cart } from "@/components/cart/Cart";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,9 +20,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`
+          ${geistSans.variable} 
+          ${geistMono.variable} 
+          ${cormorant.variable} 
+          ${BitcountPropDouble.variable} 
+          ${robotoRegular.variable} 
+          ${robotoBold.variable} 
+          ${oswaldLight.variable} 
+          ${oswaldRegular.variable} 
+          antialiased`}
       >
-        {children}
+        <>
+          <Header />
+          <Cart />
+          {children}
+        </>
       </body>
     </html>
   );
