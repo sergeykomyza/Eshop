@@ -161,7 +161,7 @@ export default nextConfig;
 
 <h3>5. Подключаем Redux</h3>
 
-В первую очередь нам нужно обернуть наше приложение в Провайдер, чтобы иметь возможность свободно обращаться к нашему хранилищу из любого компонента приложения
+<b>1.</b> В первую очередь нам нужно обернуть наше приложение в Провайдер, чтобы иметь возможность свободно обращаться к нашему хранилищу из любого компонента приложения
 <br>
 Поскольку Provider работает только из клиентского компонента, нам нужно создать отдельный клиентский компонент для него
 
@@ -224,6 +224,48 @@ export default function RootLayout({
     </html>
   );
 }
+```
+
+<b>2.</b> Создадим слайс для нашей корзины. Слайс в реакт, это кусок кода, набор действий, отвечающий за определенный функционал. Он содержит имя слайса, начальное состояние, редьюсеры и экшены.
+<br>
+Вот так будет выглядеть наш слайс, в котором пока будет только один редьюсер, отвечающий за добавление товара в корзину
+
+```
+import {createSlice, PayloadAction} from "@reduxjs/toolkit"
+
+export interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+interface CartState {
+  items: CartItem[];
+}
+
+const initialState: CartState = {
+  items: []
+}
+
+const cartSlice = createSlice({
+  name: "cart",
+  initialState,
+  reducers: {
+    addToCart: (state, action: PayloadAction<CartItem>) => {
+      const existing = state.items.find(item => item.id === action.payload.id);
+      if (existing) {
+        existing.quantity += action.payload.quantity;
+      } else {
+        state.items.push(action.payload);
+      }
+      localStorage.setItem("cart", JSON.stringify(state.items));
+    }
+  }
+})
+
+export const { addToCart } = cartSlice.actions;
+export default cartSlice.reducer;
 ```
 
 
